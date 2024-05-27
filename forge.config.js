@@ -8,10 +8,10 @@ module.exports = {
       config: {
         repository: {
           owner: 'Acupen',
-          name: 'Noctis-Zheng'
+          name: 'my-electron-app',
         },
         prerelease: false,
-        draft: true
+        draft: false
       }
     }
   ],
