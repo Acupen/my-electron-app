@@ -13,10 +13,15 @@
     <title>Hello from Electron renderer!</title>
 </head>
 <body>
+    Ping: <h3 id="ping"></h3>
+    Title:<input id="title" />
     <h1>Hello form Electron renderer!</h1>
+    <button id="btn" type="button">Set</button>
     <p>✋🏻</p>
     <p id="version">111</p>
     <p id="info"></p>
+    <button type="button" id="op-btn">Open a File</button>
+    File path: <strong id="filePath"></strong>
 </body>
 <script src="./renderer.js"></script>
 </html>

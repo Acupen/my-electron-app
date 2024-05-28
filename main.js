@@ -1,4 +1,4 @@
-const { app,BrowserWindow,ipcMain } = require('electron/main')
+const { app,BrowserWindow,ipcMain,dialog } = require('electron/main')
 const path = require('node:path')
 
 const createWindow = () => {
@@ -9,28 +9,42 @@ const createWindow = () => {
             preload: path.join(__dirname, 'preload.js'),
         }
     })
+
+    ipcMain.on('set-title', handleSetTitle)
+
     win.loadFile('index.html')
 }
 
 app.whenReady().then(() => {
     console.log('whenReady','ping');
+    ipcMain.handle('dialog:openFile', handleOpenFile)
     ipcMain.handle('ping', () => 'pong')
     createWindow()
   
     // for MacOS
     app.on('activate', () => {
-        console.log('activate');
       if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
   })
 
+  // only windows or linux
 app.on('window-all-closed', () => {
-    console.log(process.platform,'process')
-    // only windows or linux
     if(process.platform !== 'darwin') {
         console.log('window-all-closed')
         app.quit()
     }
 })
 
-console.log(app.on,'app')
+function handleSetTitle(event,title) {
+    const webContents = event.sender
+    const win = BrowserWindow.fromWebContents(webContents)
+    win.setTitle(title)
+}
+
+async function handleOpenFile(){
+    const { canceled, filePaths } = await dialog.showOpenDialog()
+    if(!canceled){
+        console.log(filePaths, 'filePaths', canceled);
+        return filePaths[0]
+    }
+}
